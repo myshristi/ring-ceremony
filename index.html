@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ring Ceremony - Nikhil & Dr. Shristi</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Great+Vibes&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        saffron: {
+                            50: '#fffbf0',
+                            100: '#fff3d6',
+                            300: '#ffd280',
+                            500: '#e69500',
+                            600: '#cc7a00',
+                        },
+                        maroon: {
+                            500: '#800020',
+                            700: '#5c0017',
+                            900: '#3a000e',
+                        },
+                        gold: {
+                            300: '#f6d365',
+                            400: '#fda085',
+                            500: '#d4af37',
+                            600: '#aa8c2c',
+                        },
+                        cream: '#fdfbf7',
+                    },
+                    fontFamily: {
+                        serif: ['Cormorant Garamond', 'serif'],
+                        cursive: ['Great Vibes', 'cursive'],
+                        title: ['Cinzel Decorative', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #fdfbf7 0%, #f7eee2 50%, #f1e2ce 100%);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+            color: #3a000e;
+        }
+
+        /* Glassmorphism Styling */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            box-shadow: 0 10px 30px -10px rgba(92, 0, 23, 0.1);
+        }
+
+        .glass-card-gold {
+            background: linear-gradient(145deg, rgba(255, 253, 248, 0.9), rgba(252, 243, 226, 0.8));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            box-shadow: 0 15px 35px -10px rgba(212, 175, 55, 0.2);
+        }
+
+        /* Flower Petals & Canvas Container */
+        #petal-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        /* Blooming Lotus Keyframes */
+        @keyframes pulseGlow {
+            0%, 100% { filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.4)); }
+            50% { filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.8)); }
+        }
+
+        .lotus-glow {
+            animation: pulseGlow 4s infinite ease-in-out;
+        }
+
+        /* Animated Petal Rotation */
+        .petal-outer {
+            transform-origin: center bottom;
+            transition: transform 1.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .lotus-container:hover .petal-outer-left {
+            transform: rotate(-25deg) scale(1.05);
+        }
+        .lotus-container:hover .petal-outer-right {
+            transform: rotate(25deg) scale(1.05);
+        }
+        .lotus-container:hover .petal-mid-left {
+            transform: rotate(-12deg) scale(1.05);
+        }
+        .lotus-container:hover .petal-mid-right {
+            transform: rotate(12deg) scale(1.05);
+        }
+
+        /* Rotating Dhamma Chakra */
+        @keyframes spinSlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .spin-slow {
+            animation: spinSlow 40s linear infinite;
+        }
+
+        /* Shimmer Gold Text */
+        .gold-shimmer {
+            background: linear-gradient(90deg, #aa8c2c 0%, #f6d365 50%, #aa8c2c 100%);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: shine 4s linear infinite;
+            padding-top: 0.15em;
+            padding-bottom: 0.15em;
+            line-height: 1.25;
+        }
+
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fdfbf7;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d4af37;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="relative">
+
+    <!-- Floating Petals Canvas -->
+    <canvas id="petal-canvas"></canvas>
+
+    <!-- Floating Audio Control Toggle -->
+    <div class="fixed top-5 right-5 z-50">
+        <button id="audio-btn" onclick="toggleAudio()" class="p-3.5 bg-white/80 backdrop-blur-md rounded-full shadow-lg border border-gold-500/40 text-maroon-700 hover:text-saffron-600 hover:scale-110 transition-all duration-300 flex items-center justify-center w-12 h-12" title="Ambient Chimes Sound">
+            <i id="audio-icon" class="fas fa-music text-lg"></i>
+        </button>
+    </div>
+
+    <!-- Main Container -->
+    <main class="max-w-4xl mx-auto px-4 py-6 md:py-12 relative z-20 space-y-16">
+
+        <!-- HERO SECTION -->
+        <section class="text-center pt-8 pb-12 glass-card-gold rounded-3xl p-6 sm:p-12 relative overflow-hidden">
+            <!-- Background Mandala Accent -->
+            <div class="absolute -top-20 -left-20 opacity-10 pointer-events-none">
+                <svg width="300" height="300" viewBox="0 0 100 100" class="spin-slow">
+                    <circle cx="50" cy="50" r="45" fill="none" stroke="#d4af37" stroke-width="1" stroke-dasharray="2 2"/>
+                    <circle cx="50" cy="50" r="35" fill="none" stroke="#d4af37" stroke-width="1"/>
+                    <path d="M50 5 L50 95 M5 50 L95 50 M18 18 L82 82 M18 82 L82 18" stroke="#d4af37" stroke-width="0.5"/>
+                </svg>
+            </div>
+            <div class="absolute -bottom-20 -right-20 opacity-10 pointer-events-none">
+                <svg width="300" height="300" viewBox="0 0 100 100" class="spin-slow">
+                    <circle cx="50" cy="50" r="45" fill="none" stroke="#d4af37" stroke-width="1" stroke-dasharray="2 2"/>
+                    <circle cx="50" cy="50" r="35" fill="none" stroke="#d4af37" stroke-width="1"/>
+                    <path d="M50 5 L50 95 M5 50 L95 50 M18 18 L82 82 M18 82 L82 18" stroke="#d4af37" stroke-width="0.5"/>
+                </svg>
+            </div>
+
+            <!-- Sacred Symbol: Dhamma Chakra / Lotus Motif -->
+            <div class="flex justify-center mb-4">
+                <div class="relative flex items-center justify-center">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 text-gold-500 opacity-80 spin-slow">
+                        <svg viewBox="0 0 100 100" fill="currentColor">
+                            <!-- 8-Spoked Dhamma Chakra Wheel -->
+                            <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="4"/>
+                            <circle cx="50" cy="50" r="38" fill="none" stroke="currentColor" stroke-width="2"/>
+                            <circle cx="50" cy="50" r="10" fill="currentColor"/>
+                            <g stroke="currentColor" stroke-width="3">
+                                <line x1="50" y1="12" x2="50" y2="88"/>
+                                <line x1="12" y1="50" x2="88" y2="50"/>
+                                <line x1="23" y1="23" x2="77" y2="77"/>
+                                <line x1="23" y1="77" x2="77" y2="23"/>
+                            </g>
+                        </svg>
+                    </div>
+                    <span class="absolute text-2xl text-maroon-700">☸</span>
+                </div>
+            </div>
+
+            <p class="font-serif italic text-gold-600 tracking-widest text-sm sm:text-base uppercase mb-2">
+                Namo Buddhaya • Sabbe Satta Sukhi Hontu
+            </p>
+            <p class="font-sans text-xs sm:text-sm text-maroon-700/80 tracking-wider uppercase mb-6">
+                With the blessings of Lord Buddha & Elders, we cordially invite you to
+            </p>
+
+            <h2 class="font-title text-2xl sm:text-4xl text-maroon-900 tracking-wide mb-2">
+                RING CEREMONY
+            </h2>
+            <p class="font-cursive text-3xl sm:text-4xl text-saffron-600 mb-6">
+                & Engagement Celebration
+            </p>
+
+            <!-- INTERACTIVE BLOOMING LOTUS -->
+            <div class="lotus-container my-8 cursor-pointer inline-block relative group" onclick="triggerLotusBloom()" title="Click to shower blessings!">
+                <div class="lotus-glow transition-all duration-500 transform group-hover:scale-105">
+                    <svg width="180" height="120" viewBox="0 0 200 140" class="mx-auto">
+                        <defs>
+                            <linearGradient id="lotusGradPink" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="#f8a5c2" />
+                                <stop offset="60%" stop-color="#f78fb3" />
+                                <stop offset="100%" stop-color="#e15f41" />
+                            </linearGradient>
+                            <linearGradient id="lotusGradGold" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#ffeaa7" />
+                                <stop offset="100%" stop-color="#fdcb6e" />
+                            </linearGradient>
+                            <linearGradient id="petalCenter" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="#ffffff" />
+                                <stop offset="100%" stop-color="#f8a5c2" />
+                            </linearGradient>
+                        </defs>
+
+                        <!-- Outer Bottom Petals -->
+                        <path class="petal-outer petal-outer-left" d="M100 110 C60 110 20 85 10 65 C30 65 70 85 100 110 Z" fill="url(#lotusGradPink)" opacity="0.85"/>
+                        <path class="petal-outer petal-outer-right" d="M100 110 C140 110 180 85 190 65 C170 65 130 85 100 110 Z" fill="url(#lotusGradPink)" opacity="0.85"/>
+
+                        <!-- Mid Petals -->
+                        <path class="petal-outer petal-mid-left" d="M100 110 C60 95 30 55 35 35 C60 50 85 80 100 110 Z" fill="url(#lotusGradPink)" opacity="0.95"/>
+                        <path class="petal-outer petal-mid-right" d="M100 110 C140 95 170 55 165 35 C140 50 115 80 100 110 Z" fill="url(#lotusGradPink)" opacity="0.95"/>
+
+                        <!-- Inner Petals -->
+                        <path d="M100 110 C80 80 60 30 80 15 C95 35 98 70 100 110 Z" fill="url(#petalCenter)"/>
+                        <path d="M100 110 C120 80 140 30 120 15 C105 35 102 70 100 110 Z" fill="url(#petalCenter)"/>
+
+                        <!-- Center Petal -->
+                        <path d="M100 110 C85 70 85 20 100 5 C115 20 115 70 100 110 Z" fill="url(#petalCenter)"/>
+
+                        <!-- Golden Stamen Core -->
+                        <ellipse cx="100" cy="95" rx="15" ry="8" fill="url(#lotusGradGold)"/>
+                        <circle cx="100" cy="92" r="3" fill="#d4af37"/>
+                        <circle cx="94" cy="94" r="2" fill="#d4af37"/>
+                        <circle cx="106" cy="94" r="2" fill="#d4af37"/>
+                    </svg>
+                </div>
+                <span class="inline-block mt-2 text-xs font-sans text-gold-600 bg-white/70 px-3 py-1 rounded-full border border-gold-300 shadow-sm group-hover:bg-gold-500 group-hover:text-white transition-all">
+                    ✨ Tap Lotus to Bloom Blessings ✨
+                </span>
+            </div>
+
+            <!-- COUPLE NAMES -->
+            <div class="my-6 space-y-3 pt-2">
+                <h1 class="font-cursive text-5xl sm:text-7xl gold-shimmer font-bold leading-normal drop-shadow-sm px-2">
+                    Nikhil
+                </h1>
+                <div class="flex items-center justify-center gap-4 my-2">
+                    <span class="h-[1px] w-12 bg-gold-500/50"></span>
+                    <span class="font-serif italic text-2xl text-maroon-700">&</span>
+                    <span class="h-[1px] w-12 bg-gold-500/50"></span>
+                </div>
+                <h1 class="font-cursive text-5xl sm:text-7xl gold-shimmer font-bold leading-normal drop-shadow-sm px-2">
+                    Dr. Shristi
+                </h1>
+            </div>
+
+            <p class="font-serif text-lg sm:text-xl text-maroon-800 italic mt-4 max-w-md mx-auto">
+                "Two lives, two hearts, joined together in eternal friendship, love and devotion."
+            </p>
+        </section>
+
+        <!-- COUNTDOWN TIMER SECTION -->
+        <section class="glass-card rounded-2xl p-6 sm:p-8 text-center relative">
+            <h3 class="font-serif text-xl sm:text-2xl text-maroon-900 mb-6 flex items-center justify-center gap-2">
+                <i class="fas fa-hourglass-half text-saffron-500 text-lg"></i>
+                Counting Down To The Special Moment
+            </h3>
+
+            <div id="countdown" class="grid grid-cols-4 gap-2 sm:gap-4 max-w-lg mx-auto">
+                <div class="bg-white/80 p-3 sm:p-4 rounded-xl border border-gold-300 shadow-sm">
+                    <span id="days" class="block font-title text-2xl sm:text-4xl text-maroon-700 font-bold">00</span>
+                    <span class="text-[10px] sm:text-xs font-sans uppercase tracking-wider text-gray-600">Days</span>
+                </div>
+                <div class="bg-white/80 p-3 sm:p-4 rounded-xl border border-gold-300 shadow-sm">
+                    <span id="hours" class="block font-title text-2xl sm:text-4xl text-maroon-700 font-bold">00</span>
+                    <span class="text-[10px] sm:text-xs font-sans uppercase tracking-wider text-gray-600">Hours</span>
+                </div>
+                <div class="bg-white/80 p-3 sm:p-4 rounded-xl border border-gold-300 shadow-sm">
+                    <span id="minutes" class="block font-title text-2xl sm:text-4xl text-maroon-700 font-bold">00</span>
+                    <span class="text-[10px] sm:text-xs font-sans uppercase tracking-wider text-gray-600">Mins</span>
+                </div>
+                <div class="bg-white/80 p-3 sm:p-4 rounded-xl border border-gold-300 shadow-sm">
+                    <span id="seconds" class="block font-title text-2xl sm:text-4xl text-maroon-700 font-bold">00</span>
+                    <span class="text-[10px] sm:text-xs font-sans uppercase tracking-wider text-gray-600">Secs</span>
+                </div>
+            </div>
+            <p class="text-xs text-maroon-700/70 mt-4 font-serif italic">Saturday, 14th November 2026 • 3:00 PM IST</p>
+        </section>
+
+        <!-- COUPLE PROFILE CARDS -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Groom Card -->
+            <div class="glass-card rounded-2xl p-6 text-center hover:shadow-xl transition-all duration-300 border-t-4 border-t-gold-500">
+                <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-saffron-100 flex items-center justify-center border-2 border-gold-400 text-saffron-600 text-3xl shadow-inner">
+                    👨‍💼
+                </div>
+                <span class="text-xs font-sans tracking-widest text-gold-600 uppercase font-semibold">The Groom</span>
+                <h3 class="font-cursive text-4xl text-maroon-900 my-1">Nikhil</h3>
+                <p class="text-xs text-maroon-800/80 font-serif italic px-4 mt-2">
+                    Stepping into a beautiful new chapter with grace, joyous hearts, and sacred blessings.
+                </p>
+            </div>
+
+            <!-- Bride Card -->
+            <div class="glass-card rounded-2xl p-6 text-center hover:shadow-xl transition-all duration-300 border-t-4 border-t-gold-500">
+                <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-saffron-100 flex items-center justify-center border-2 border-gold-400 text-saffron-600 text-3xl shadow-inner">
+                    👩‍⚕️
+                </div>
+                <span class="text-xs font-sans tracking-widest text-gold-600 uppercase font-semibold">The Bride</span>
+                <h3 class="font-cursive text-4xl text-maroon-900 my-1">Dr. Shristi</h3>
+                <p class="text-xs text-maroon-800/80 font-serif italic px-4 mt-2">
+                    Healing hearts with compassion, now embarking on a lifelong journey of shared happiness.
+                </p>
+            </div>
+        </section>
+
+        <!-- EVENT DETAILS & VENUE -->
+        <section class="glass-card-gold rounded-3xl p-6 sm:p-10 relative">
+            <div class="text-center mb-8">
+                <span class="text-gold-600 text-2xl">🪷</span>
+                <h2 class="font-title text-2xl sm:text-3xl text-maroon-900">Event Details & Venue</h2>
+                <div class="w-24 h-0.5 bg-gold-400 mx-auto mt-2"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <!-- Date & Time Info -->
+                <div class="space-y-6">
+                    <div class="flex items-start gap-4 p-4 rounded-xl bg-white/60 border border-gold-200">
+                        <div class="p-3 bg-saffron-500 text-white rounded-lg shadow-md">
+                            <i class="far fa-calendar-alt text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-serif font-bold text-lg text-maroon-900">Date</h4>
+                            <p class="text-sm text-maroon-800">Saturday, November 14, 2026</p>
+                            <p class="text-xs text-gold-600 font-semibold mt-0.5">An auspicious & blessed day</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-4 p-4 rounded-xl bg-white/60 border border-gold-200">
+                        <div class="p-3 bg-saffron-500 text-white rounded-lg shadow-md">
+                            <i class="far fa-clock text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-serif font-bold text-lg text-maroon-900">Time</h4>
+                            <p class="text-sm text-maroon-800">3:00 PM Onwards</p>
+                            <p class="text-xs text-saffron-600 font-semibold mt-0.5">🍱 Lunch is served</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Venue Info Card -->
+                <div class="p-6 rounded-2xl bg-white/80 border border-gold-300 shadow-sm space-y-4">
+                    <div class="flex items-center gap-3 text-maroon-900">
+                        <i class="fas fa-map-marker-alt text-2xl text-saffron-600"></i>
+                        <h4 class="font-serif font-bold text-xl">Venue Address</h4>
+                    </div>
+                    
+                    <div class="space-y-1 text-sm text-maroon-800 leading-relaxed pl-2 border-l-2 border-saffron-300">
+                        <p class="font-semibold text-maroon-900 text-base">Shri's Residence</p>
+                        <p>B-27, Bezonbagh Housing Society</p>
+                        <p class="text-saffron-600 font-medium">✨ In front of Maitri Buddha Vihar</p>
+                        <p>Jaripatka, Nagpur - 440014</p>
+                        <p class="text-xs text-gray-500 pt-1">Maharashtra, India</p>
+                    </div>
+
+                    <!-- Google Maps Button -->
+                    <a href="https://www.google.com/maps/search/?api=1&query=B-27+Bezonbagh+Housing+Society+In+front+of+Maitri+Buddha+Vihar+Jaripatka+Nagpur+440014" 
+                       target="_blank" 
+                       rel="noopener noreferrer"
+                       class="inline-flex items-center justify-center gap-2 w-full py-3 px-4 bg-gradient-to-r from-saffron-500 to-gold-500 hover:from-saffron-600 hover:to-gold-600 text-white font-medium text-sm rounded-xl shadow-md transition-all duration-300 transform hover:-translate-y-0.5">
+                        <i class="fas fa-directions"></i> Get Directions on Google Maps
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- INTERACTIVE BLESSINGS & FLOWER SHOWER SECTION -->
+        <section class="glass-card rounded-3xl p-8 text-center relative overflow-hidden">
+            <h3 class="font-title text-2xl text-maroon-900 mb-2">Shower Lotus Blessings</h3>
+            <p class="text-sm text-maroon-800/80 mb-6 font-serif">
+                Send your warm wishes and rain lotus petals & golden glitter over Nikhil & Dr. Shristi!
+            </p>
+
+            <button onclick="triggerPetalShower()" class="px-8 py-4 bg-maroon-700 hover:bg-maroon-900 text-gold-300 hover:text-white font-serif font-bold text-lg rounded-full shadow-lg border-2 border-gold-400 hover:border-gold-300 transition-all duration-300 transform hover:scale-105 active:scale-95 flex items-center gap-3 mx-auto">
+                <span>🪷</span> Send Flower Shower & Blessings <span>✨</span>
+            </button>
+        </section>
+
+        <!-- FOOTER BLESSING -->
+        <footer class="text-center py-6 text-maroon-800/80 space-y-2">
+            <p class="font-serif italic text-sm">
+                "May all beings be happy, peaceful and liberated."
+            </p>
+            <div class="flex items-center justify-center gap-2 text-gold-600">
+                <span>☸</span>
+                <span class="text-xs tracking-widest uppercase font-sans">Nikhil & Dr. Shristi</span>
+                <span>☸</span>
+            </div>
+            <p class="text-[11px] text-gray-500">14.11.2026 • Jaripatka, Nagpur</p>
+        </footer>
+
+    </main>
+
+    <!-- SUCCESS MODAL FOR RSVP -->
+    <div id="rsvp-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm hidden p-4">
+        <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-sm w-full text-center border-2 border-gold-400 shadow-2xl relative">
+            <div class="w-16 h-16 bg-saffron-100 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl text-saffron-600">
+                🪷
+            </div>
+            <h3 class="font-title text-xl text-maroon-900 mb-2">Thank You!</h3>
+            <p id="modal-text" class="text-sm text-maroon-800 mb-6 font-serif">
+                Your RSVP and warm blessings have been received with love.
+            </p>
+            <button onclick="closeModal()" class="w-full py-2.5 bg-maroon-700 text-gold-300 font-serif font-bold rounded-xl hover:bg-maroon-800 transition-colors">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        /* ----------------------------------------------------
+           1. COUNTDOWN TIMER LOGIC
+        ---------------------------------------------------- */
+        const eventDate = new Date("November 14, 2026 15:00:00").getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const difference = eventDate - now;
+
+            if (difference > 0) {
+                const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+                document.getElementById("days").innerText = String(days).padStart(2, '0');
+                document.getElementById("hours").innerText = String(hours).padStart(2, '0');
+                document.getElementById("minutes").innerText = String(minutes).padStart(2, '0');
+                document.getElementById("seconds").innerText = String(seconds).padStart(2, '0');
+            } else {
+                document.getElementById("countdown").innerHTML = "<div class='col-span-4 text-center font-title text-2xl text-saffron-600'>The Celebration Has Begun! 🎉</div>";
+            }
+        }
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        /* ----------------------------------------------------
+           2. CANVAS FLOATING LOTUS PETALS ANIMATION
+        ---------------------------------------------------- */
+        const canvas = document.getElementById("petal-canvas");
+        const ctx = canvas.getContext("2d");
+
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        window.addEventListener("resize", () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+        class Petal {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * -height;
+                this.size = Math.random() * 12 + 8;
+                this.speedY = Math.random() * 1.2 + 0.6;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.rotation = Math.random() * 360;
+                this.rotationSpeed = (Math.random() - 0.5) * 1.5;
+                this.opacity = Math.random() * 0.5 + 0.4;
+                // Soft lotus pink or gold shades
+                const colors = ['#f8a5c2', '#f78fb3', '#f8d7da', '#ffd280', '#e15f41'];
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+            }
+
+            update() {
+                this.y += this.speedY;
+                this.x += Math.sin(this.y * 0.01) + this.speedX;
+                this.rotation += this.rotationSpeed;
+
+                if (this.y > height + 20) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate((this.rotation * Math.PI) / 180);
+                ctx.globalAlpha = this.opacity;
+                ctx.fillStyle = this.color;
+
+                // Draw Lotus Petal Shape
+                ctx.beginPath();
+                ctx.moveTo(0, -this.size);
+                ctx.quadraticCurveTo(this.size / 2, -this.size / 3, this.size / 2, this.size / 3);
+                ctx.quadraticCurveTo(0, this.size, -this.size / 2, this.size / 3);
+                ctx.quadraticCurveTo(-this.size / 2, -this.size / 3, 0, -this.size);
+                ctx.closePath();
+                ctx.fill();
+
+                ctx.restore();
+            }
+        }
+
+        const petals = Array.from({ length: 30 }, () => new Petal());
+
+        function animatePetals() {
+            ctx.clearRect(0, 0, width, height);
+            petals.forEach(petal => {
+                petal.update();
+                petal.draw();
+            });
+            requestAnimationFrame(animatePetals);
+        }
+        animatePetals();
+
+        /* ----------------------------------------------------
+           3. INTERACTIVE FLOWER SHOWER (BURST EFFECT)
+        ---------------------------------------------------- */
+        function triggerPetalShower() {
+            for (let i = 0; i < 40; i++) {
+                const p = new Petal();
+                p.x = width / 2 + (Math.random() - 0.5) * 200;
+                p.y = height / 2 + (Math.random() - 0.5) * 200;
+                p.speedY = (Math.random() - 0.5) * 6 - 2;
+                p.speedX = (Math.random() - 0.5) * 8;
+                p.size = Math.random() * 16 + 10;
+                petals.push(p);
+            }
+            // Trim down after 4 seconds
+            setTimeout(() => {
+                if (petals.length > 30) {
+                    petals.splice(30, petals.length - 30);
+                }
+            }, 4000);
+        }
+
+        function triggerLotusBloom() {
+            triggerPetalShower();
+            playChimeSound();
+        }
+
+        /* ----------------------------------------------------
+           4. AMBIENT AUDIO CHIME SYNTHESIS (NO EXTERNAL AUDIO FILE)
+        ---------------------------------------------------- */
+        let audioCtx = null;
+        let isAudioPlaying = false;
+
+        function playChimeSound() {
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+
+                // Pentatonic bell scale for serene Buddhist temple chime vibe
+                const notes = [523.25, 659.25, 783.99, 987.77, 1046.50]; 
+                const note = notes[Math.floor(Math.random() * notes.length)];
+
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(note, audioCtx.currentTime);
+
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 2.5);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start();
+                osc.stop(audioCtx.currentTime + 2.5);
+            } catch (e) {
+                console.log("Web Audio API not allowed without user interaction.");
+            }
+        }
+
+        function toggleAudio() {
+            isAudioPlaying = !isAudioPlaying;
+            const icon = document.getElementById("audio-icon");
+            const btn = document.getElementById("audio-btn");
+
+            if (isAudioPlaying) {
+                icon.className = "fas fa-volume-up text-lg text-saffron-500 animate-pulse";
+                btn.classList.add("ring-2", "ring-gold-400");
+                playChimeSound();
+                // Play ambient chime intervals
+                window.chimeInterval = setInterval(playChimeSound, 3500);
+            } else {
+                icon.className = "fas fa-music text-lg";
+                btn.classList.remove("ring-2", "ring-gold-400");
+                if (window.chimeInterval) clearInterval(window.chimeInterval);
+            }
+        }
+    </script>
+</body>
+</html>
